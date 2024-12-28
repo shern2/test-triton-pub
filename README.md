@@ -73,9 +73,7 @@ Modify `dev_start.sh` `tritonserver` command to start the FinBERT models, before
 Validate using `notebooks/00_test_fastapi_proxy_output.ipynb`.
 
 
-# case 3: FinBERT model (TensorRT) multiple instances
-
-
+### case 3: FinBERT model (TensorRT) multiple instances
 
 Modify `dev_start.sh` `tritonserver` command to start the FinBERT models, before running it:
 ```bash
@@ -91,29 +89,6 @@ instance_group [
     }
 ]
 ```
-
-
-
-
-## TODOs and Qns
-
-1. - [ ] Automate creation of `config.pbtxt` files for a model end-to-end.
-    1. Add in validations e.g.
-        1. Ensure `max_batch_size` aligns across the pipeline components in the "ensemble" triton model
-        1. `dynamic_batching.preferred_batch_size` must have sizes <= `max_batch_size`
-1. qn. If we perform optimization after conversion to ONNX, do we lose some performance vs optimizing before?
-1. - [ ] Find out good default settings for triton
-    1. https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/tutorials/Conceptual_Guide/Part_2-improving_resource_utilization/README.html#concurrent-model-execution
-1. - kiv. Explore optimization approaches
-    1. https://nvidia.github.io/TensorRT-Model-Optimizer/getting_started/1_overview.html
-
-
-## Thoughts and reflections
-
-1. I set
-There are many forms of
-1. Programmatically syncing triton's protobuf settings to facilitate programmatic generation of `config.pbtxt` files is still big pain. Will need to rely
-
 
 ## References
 
