@@ -1,0 +1,59 @@
+name: "finbert-trt-model"
+backend: "tensorrt"
+# platform: "tensorrt_plan"
+max_batch_size: 16
+
+input [
+    {
+        name: "input_ids"
+        data_type: TYPE_INT32
+        dims: [ -1 ]
+    },
+    {
+        name: "attention_mask"
+        data_type: TYPE_INT32
+        dims: [ -1 ]
+    },
+    {
+        name: "token_type_ids"
+        data_type: TYPE_INT32
+        dims: [ -1 ]
+    }
+]
+
+output [
+    {
+        name: "logits"
+        data_type: TYPE_FP32
+        dims: [ 3 ]
+    }
+]
+
+instance_group [
+    {
+        kind: KIND_GPU
+        count: 1
+    }
+]
+
+dynamic_batching {
+    preferred_batch_size: [8, 16]
+    max_queue_delay_microseconds: 100
+}
+
+optimization {
+    cuda {
+        graphs: true  # Enable CUDA graphs for reduced kernel launch overhead
+    }
+    execution_accelerators {
+        gpu_execution_accelerator: [
+            {
+                name: "tensorrt"
+                parameters {
+                    key: "precision"
+                    value: "fp16"  # Enable FP16 precision if supported
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,23 @@
+services:
+  triton:
+    image: triton-fastapi:1
+    build:
+      context: .
+    container_name: triton
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    volumes:
+      - ./models:/models
+      - ./app:/app
+    # command: ["tritonserver", "--model-repository=/models"]
+    command: [ "sh", "-c", "tail -f /dev/null" ]
+    ports:
+      - "8000:8000" # Triton HTTP API
+      - "8001:8001" # Triton gRPC API
+      - "8002:8002" # Triton Metrics API
+      - "8005:8005" # FastAPI Proxy API
